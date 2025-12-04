@@ -130,6 +130,47 @@ void drawRocks() {
         glPopMatrix();
     }
 }
+
+void drawOnsenPool() {
+    float a = 15.5f;   // panjang sumbu X (lebar kolam)
+    float b = 10.8f;   // panjang sumbu Z (lebih pendek ? lonjong)
+    float edgeHeight = 0.5f;
+    int seg = 96;
+
+    // Air di oval
+    glColor3f(0.10f, 0.30f, 0.48f);
+    glBegin(GL_POLYGON);
+    for(int i = 0; i < seg; i++) {
+        float t = i * 2*PI / seg;
+        glVertex3f(a * cosf(t) * 0.93f, 0.06f, b * sinf(t) * 0.93f);
+    }
+    glEnd();
+
+    //sisi luar oval
+    glColor3f(0.28f, 0.24f, 0.18f);
+    glBegin(GL_QUAD_STRIP);
+    for(int i = 0; i <= seg; i++) {
+        float t = i * 2*PI / seg;
+        float x = a * cosf(t);
+        float z = b * sinf(t);
+        glVertex3f(x, 0.0f, z);
+        glVertex3f(x, edgeHeight, z);
+    }
+    glEnd();
+
+    // Dinding dalam oval
+    glColor3f(0.18f, 0.15f, 0.12f);
+    glBegin(GL_QUAD_STRIP);
+    for(int i = 0; i <= seg; i++) {
+        float t = i * 2*PI / seg;
+        float x = a * cosf(t) * 0.93f;
+        float z = b * sinf(t) * 0.93f;
+        glVertex3f(x, 0.06f, z);
+        glVertex3f(x, 0.06f - 0.48f, z);
+    }
+    glEnd();
+}
+
 // tanah
 void drawGround() {
     glColor3f(0.28f, 0.24f, 0.18f);
@@ -186,7 +227,7 @@ void display() {
     drawGround();
     drawRocks();
     drawLightSources();
-
+    drawOnsenPool();
     glutSwapBuffers();
 }
 
